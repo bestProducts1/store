@@ -4,40 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Your Cart</title>
-    <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js",
-      );
-      fbq("init", "9083739771684521");
-      fbq("track", "PageView");
-    </script>
-    <noscript
-      ><img
-        height="1"
-        width="1"
-        style="display: none"
-        src="https://www.facebook.com/tr?id=9083739771684521&ev=PageView&noscript=1"
-    /></noscript>
     <link rel="icon" type="image/png" href="icon/32.png" />
     <link rel="apple-touch-icon" href="icon/180.png" />
     <style>
@@ -58,7 +24,7 @@
         background: #f4f4f4;
         color: #333;
         -webkit-font-smoothing: antialiased;
-        padding-bottom: 120px; /* Footer space */
+        padding-bottom: 120px;
       }
 
       /* ================= HEADER ================= */
@@ -163,7 +129,6 @@
         margin: 0;
       }
 
-      /* Card Style */
       .cart-item {
         background: #fff;
         padding: 15px;
@@ -350,15 +315,15 @@
       .btn-clear {
         background: #f0f0f0;
         color: #333;
-        flex: 0.6; /* Clear 按钮稍小一点 */
+        flex: 0.6;
       }
       .btn-order {
-        background: #25d366; /* WhatsApp Green */
+        background: #25d366;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px; /* Added gap for icon spacing */
+        gap: 8px;
       }
 
       /* Discount Tiers */
@@ -442,7 +407,7 @@
       <nav>
         <a class="menu-link" href="index.html">Home</a>
         <a class="menu-link" href="index.html">Shop All</a>
-        <a class="menu-link" href="https://wa.me/17253041220" target="_blank"
+        <a class="menu-link" href="https://wa.me/16232027321" target="_blank"
           >Contact Us</a
         >
       </nav>
@@ -536,14 +501,12 @@
 
       // ================= Back Button Logic =================
       function handleBack() {
-        // 如果有历史记录且来自同一站点，则回退保留位置
         if (
           document.referrer &&
           document.referrer.includes(window.location.host)
         ) {
           history.back();
         } else {
-          // 否则默认跳回首页
           window.location.href = "index.html";
         }
       }
@@ -565,7 +528,7 @@
         tiersContainer: document.getElementById("discount-tiers"),
       };
 
-      const whatsappNumber = "17253041220";
+      const whatsappNumber = "16232027321";
 
       const tiers = [
         { min: 1, max: 1, percent: 0 },
@@ -579,14 +542,6 @@
         { min: 80, max: 100, percent: 0.32 },
         { min: 101, max: Infinity, percent: 0.35 },
       ];
-
-      function loadCart() {
-        return JSON.parse(localStorage.getItem("perfumeCart") || "[]");
-      }
-      function saveCart(cart) {
-        localStorage.setItem("perfumeCart", JSON.stringify(cart));
-        window.dispatchEvent(new Event("storage"));
-      }
 
       function renderCart() {
         const cart = loadCart();
@@ -662,14 +617,12 @@
           else other += qty;
         });
 
-        // Discount Logic
         const tier = tiers.find(
           (t) => totalQty >= t.min && totalQty <= t.max,
         ) || { percent: 0 };
         const discountVal = subtotal * tier.percent;
         const finalTotal = subtotal - discountVal;
 
-        // Render Summary
         summaryEls.lv.textContent = lv;
         summaryEls.other.textContent = other;
         summaryEls.subtotal.textContent = `$${subtotal.toFixed(2)}`;
@@ -678,7 +631,6 @@
         ).toFixed(0)}%)`;
         summaryEls.total.textContent = `$${Math.round(finalTotal).toFixed(2)}`;
 
-        // Upsell Logic
         const nextTier = tiers.find((t) => t.min > totalQty);
         if (nextTier && totalQty >= 5) {
           const needed = nextTier.min - totalQty;
@@ -694,7 +646,6 @@
           summaryEls.upsell.style.display = "none";
         }
 
-        // Render Tiers Badges
         summaryEls.tiersList.innerHTML = tiers
           .map((t) => {
             const active =
@@ -708,7 +659,6 @@
           .join("");
       }
 
-      // Actions
       window.updateQty = (index, change) => {
         const cart = loadCart();
         if (cart[index]) {
@@ -732,12 +682,11 @@
 
       clearCartBtn.onclick = () => {
         if (confirm("Clear entire cart?")) {
-          localStorage.removeItem("perfumeCart");
+          clearCart();
           renderCart();
         }
       };
 
-      // ================= FIXED SEND ORDER LOGIC =================
       sendOrderBtn.onclick = () => {
         const cart = loadCart();
         if (cart.length === 0) return alert("Cart is empty");
@@ -756,12 +705,10 @@
           }
         });
 
-        // 1. 使用 \n 来代替 %0A，让 JS 字符串自然换行
         let msg = `*New Order Request* 📦\n`;
         msg += `----------------------------\n`;
 
         cart.forEach((item) => {
-          // 这里不需要手动处理 &，因为最后会统一 encode
           msg += `${item.caption} x *${item.quantity}*\n\n`;
         });
 
@@ -773,8 +720,6 @@
         msg += `----------------------------\n`;
         msg += `*Total Amount:* ${summaryEls.total.textContent}`;
 
-        // 2. 关键步骤：使用 encodeURIComponent 对整个消息进行编码
-        // 这样 & 会被转换为 %26，换行符 \n 会被转换为 %0A，避免链接截断
         const encodedMsg = encodeURIComponent(msg);
 
         window.open(
@@ -783,7 +728,6 @@
         );
       };
 
-      // Init
       document.addEventListener("DOMContentLoaded", renderCart);
     </script>
   </body>
