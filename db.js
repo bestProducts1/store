@@ -1,14 +1,9 @@
 // ==========================================
-// 🔗 香水网站跳转目标 URL
-// ==========================================
-const PERFUME_SITE_URL = "https://bestproducts1.github.io/catalog/";
-
-// ==========================================
 // 🛒 全局购物车 LocalStorage 通用管理函数
 // ==========================================
 function loadCart() {
   try {
-    const data = localStorage.getItem("perfumeCart");
+    const data = localStorage.getItem("store_Cart");
     return data ? JSON.parse(data) : [];
   } catch (e) {
     console.error("读取购物车失败:", e);
@@ -18,24 +13,21 @@ function loadCart() {
 
 function saveCart(cart) {
   try {
-    localStorage.setItem("perfumeCart", JSON.stringify(cart));
+    localStorage.setItem("store_Cart", JSON.stringify(cart));
   } catch (e) {
     console.error("保存购物车失败:", e);
   }
 }
 
 function clearCart() {
-  localStorage.removeItem("perfumeCart");
+  localStorage.removeItem("store_Cart");
 }
 
 // ==========================================
 // db.js - 产品数据管理中心
 // ==========================================
-
-// 🔴 注意：已将 pubhtml 修正为 pub?output=csv
 const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRu7b5PXTT7XKOyfWf8zyQIE-uP0W6ZmuQh7e6BdsqQ-igpoLC_IMd-RWk6KBHFR0jJgic--5av7zGc/pub?output=csv";
-
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRu7b5PXTT7XKOyfWf8zyQIE-uP0W6ZmuQh7e6BdsqQ-igpoLC_IMd-RWk6KBHFR0jJgic--5av7zGc/pub?gid=0&single=true&output=csv";
 
 const CACHE_DURATION = 1 * 60 * 1000; // 缓存时间 (1分钟)
 window.perfumeDB = [];
