@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundPulse | Premium Headphones & Audio Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#0f172a',
+                        },
+                        whatsapp: '#25D366'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col md:flex-row">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+        <button id="mobileMenuBtn" class="p-2 text-slate-300 hover:text-white">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-headphones text-brand-500 text-xl"></i>
+            <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">SoundPulse</span>
+        </div>
+        <button id="mobileCartBtn" class="p-2 text-slate-300 hover:text-white relative">
+            <i class="fa-solid fa-shopping-bag text-xl"></i>
+            <span id="mobileCartBadge" class="hidden absolute -top-1 -right-1 bg-brand-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Left Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 flex flex-col transform -translate-x-full md:translate-x-0 md:static md:z-auto transition-transform duration-300 ease-in-out">
+        <!-- Sidebar Header -->
+        <div class="p-6 border-b border-slate-800/80 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-500">
+                    <i class="fa-solid fa-headphones text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight text-white">SoundPulse</h1>
+                    <p class="text-xs text-slate-400">Audio Experience</p>
+                </div>
+            </a>
+            <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- External Partner Link Banner (Perfume List) -->
+        <div class="p-4 mx-4 my-3 bg-gradient-to-r from-pink-950/40 via-purple-950/30 to-slate-900 border border-pink-500/30 rounded-xl">
+            <div class="flex items-center space-x-2 text-pink-400 text-xs font-semibold uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-spray-can-sparkles"></i>
+                <span>Partner Store</span>
+            </div>
+            <p class="text-xs text-slate-300 mb-2.5">Looking for premium fragrances & perfumes?</p>
+            <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-between w-full px-3 py-2 bg-pink-600/20 hover:bg-pink-600/30 border border-pink-500/40 rounded-lg text-xs font-semibold text-pink-200 transition-colors group">
+                <span>Explore Perfumes</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+            </a>
+        </div>
+
+        <!-- Categories Navigation -->
+        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-6">
+            <div>
+                <h2 class="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Categories</h2>
+                <nav id="categoryNav" class="space-y-1">
+                    <button data-category="all" class="category-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                        <span class="flex items-center space-x-3">
+                            <i class="fa-solid fa-border-all w-5"></i>
+                            <span>All Headsets</span>
+                        </span>
+                        <span id="count-all" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">0</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="border-t border-slate-800/80 pt-4 space-y-3 px-3">
+                <div class="flex items-center space-x-3 text-xs text-slate-400">
+                    <i class="fa-solid fa-truck-fast text-brand-500 text-sm w-5"></i>
+                    <span>Fast Express Delivery</span>
+                </div>
+                <div class="flex items-center space-x-3 text-xs text-slate-400">
+                    <i class="fa-solid fa-shield-halved text-brand-500 text-sm w-5"></i>
+                    <span>Official Warranty</span>
+                </div>
+                <div class="flex items-center space-x-3 text-xs text-slate-400">
+                    <i class="fa-brands fa-whatsapp text-whatsapp text-sm w-5"></i>
+                    <span>Direct WhatsApp Checkout</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+            &copy; 2026 SoundPulse Audio. All rights reserved.
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col min-w-0 min-h-screen">
+        <!-- Search & Action Header -->
+        <header class="sticky top-0 z-30 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="relative flex-1 max-w-lg">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="searchInput" type="text" placeholder="Search headphones, model, features..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+                <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between sm:justify-end space-x-3">
+                <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="hidden lg:inline-flex items-center space-x-2 px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-xs font-medium text-slate-300 hover:text-pink-400 transition-colors">
+                    <i class="fa-solid fa-spray-can-sparkles text-pink-400"></i>
+                    <span>Perfume Shop</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                </a>
+
+                <button id="cartDrawerBtn" class="flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow-lg shadow-brand-600/20 active:scale-95">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Cart</span>
+                    <span id="cartBadge" class="bg-white text-brand-700 text-xs font-bold px-2 py-0.5 rounded-full ml-1">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Banner -->
+        <div class="px-4 md:px-8 pt-6">
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-slate-900 via-brand-950/40 to-slate-900 border border-slate-800 p-6 md:p-8">
+                <div class="max-w-xl relative z-10">
+                    <span class="inline-block px-3 py-1 bg-brand-500/10 border border-brand-500/30 text-brand-400 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
+                        🎧 Next-Gen Sound Quality
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight">
+                        Find Your Perfect Audio Companion
+                    </h2>
+                    <p class="text-slate-400 text-sm mb-4">
+                        Browse our catalog, set desired quantities, and order instantly via WhatsApp with one click!
+                    </p>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span id="dataSourceBadge" class="inline-flex items-center space-x-1.5 text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-700">
+                            <i class="fa-solid fa-spinner fa-spin text-brand-400" id="sheetStatusIcon"></i>
+                            <span id="sheetStatusText">Loading catalog...</span>
+                        </span>
+                        <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs text-pink-400 hover:text-pink-300 underline underline-offset-4">
+                            <span>Visit Perfume Store</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="flex-1 px-4 md:px-8 py-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 id="categoryTitle" class="text-xl font-bold text-white">All Headphones</h3>
+                    <p id="productCountLabel" class="text-xs text-slate-400">Showing all items</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="sortSelect" class="text-xs text-slate-400 hidden sm:inline">Sort by:</label>
+                    <select id="sortSelect" class="bg-slate-900 border border-slate-800 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-brand-500">
+                        <option value="default">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name: A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+            <div id="emptyState" class="hidden text-center py-16 px-4">
+                <div class="w-16 h-16 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
+                    <i class="fa-solid fa-headphones"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-1">No products found</h4>
+                <p class="text-slate-400 text-sm max-w-sm mx-auto mb-4">We couldn't find anything matching your current filters.</p>
+                <button id="resetFiltersBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-semibold transition-colors">Reset Filters</button>
+            </div>
+        </div>
+
+        <footer class="mt-auto border-t border-slate-800 bg-slate-900/50 px-4 md:px-8 py-6 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-xs text-slate-400">
+                <p class="font-medium text-slate-300 mb-1">SoundPulse Direct Store</p>
+                <p>Easy audio shopping with instant WhatsApp order confirmation.</p>
+            </div>
+            <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs font-medium text-pink-400 hover:text-pink-300 bg-pink-950/30 border border-pink-500/30 px-3 py-1.5 rounded-lg transition-colors">
+                <i class="fa-solid fa-spray-can-sparkles"></i>
+                <span>Visit Perfume Collection</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+        </footer>
+    </main>
+
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div id="cartBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-slate-900 border-l border-slate-800 flex flex-col shadow-2xl">
+                <div class="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-bag-shopping text-brand-500 text-xl"></i>
+                        <h2 class="text-lg font-bold text-white">Your Shopping Cart</h2>
+                    </div>
+                    <button id="closeCartBtn" class="text-slate-400 hover:text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4"></div>
+
+                <div id="cartFooter" class="border-t border-slate-800 p-4 sm:p-6 bg-slate-950/60 space-y-4">
+                    <!-- Partner Store Alert Link inside Checkout section -->
+                    <div class="bg-gradient-to-r from-pink-950/40 to-purple-950/30 border border-pink-500/30 rounded-xl p-3 flex items-center justify-between text-xs">
+                        <div class="flex items-center space-x-2 text-pink-300">
+                            <i class="fa-solid fa-spray-can-sparkles text-pink-400"></i>
+                            <span>Check out our Perfume List too!</span>
+                        </div>
+                        <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="text-pink-400 hover:text-pink-300 font-semibold underline flex items-center space-x-1">
+                            <span>Visit</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-slate-400">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal" class="font-semibold text-slate-200">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-slate-400">
+                            <span>Shipping</span>
+                            <span class="text-emerald-400 font-medium">Calculated via WhatsApp</span>
+                        </div>
+                        <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-slate-800">
+                            <span>Total</span>
+                            <span id="cartTotal" class="text-brand-400">$0.00</span>
+                        </div>
+                    </div>
+
+                    <form id="checkoutForm" class="space-y-3 pt-2">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+                            <i class="fa-solid fa-user-tag text-brand-500"></i>
+                            <span>Customer Shipping Info</span>
+                        </h3>
+                        <input type="text" id="custName" required placeholder="Full Name *" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                        <input type="tel" id="custPhone" required placeholder="Phone / WhatsApp Number *" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                        <textarea id="custAddress" required rows="2" placeholder="Delivery Address & City *" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"></textarea>
+                        <input type="text" id="custNote" placeholder="Order Notes (Optional)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+
+                        <button type="submit" id="whatsappCheckoutBtn" class="w-full bg-whatsapp hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition-all active:scale-95">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                            <span>Send Order to WhatsApp (1 6232027321)</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRu7b5PXTT7XKOyfWf8zyQIE-uP0W6ZmuQh7e6BdsqQ-igpoLC_IMd-RWk6KBHFR0jJgic--5av7zGc/pub?gid=0&single=true&output=csv";
+        const WHATSAPP_NUMBER = "16232027321";
+
+        const FALLBACK_PRODUCTS = [
+            { id: "HP-01", title: "SoundPulse Ultra ANC Wireless", price: 129.99, category: "Noise Canceling", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80", description: "Active Noise Canceling over-ear headphones with 40h battery life." },
+            { id: "HP-02", title: "ProStudio Reference Headset", price: 189.50, category: "Studio & Audiophile", image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80", description: "High-resolution studio monitor headphones." },
+            { id: "HP-03", title: "AirFit Sports Earbuds", price: 59.99, category: "Wireless & Sports", image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80", description: "IPX7 waterproof wireless earbuds for active workouts." },
+            { id: "HP-04", title: "Apex Gaming Surround Headset", price: 89.00, category: "Gaming & Wired", image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80", description: "7.1 Surround Sound gaming headset with noise-canceling mic." }
+        ];
+
+        let products = [];
+        let cart = JSON.parse(localStorage.getItem('soundpulse_cart') || '[]');
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        const productsGrid = document.getElementById('productsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const categoryNav = document.getElementById('categoryNav');
+        const categoryTitle = document.getElementById('categoryTitle');
+        const productCountLabel = document.getElementById('productCountLabel');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const sortSelect = document.getElementById('sortSelect');
+        
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartDrawerBtn = document.getElementById('cartDrawerBtn');
+        const mobileCartBtn = document.getElementById('mobileCartBtn');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartBackdrop = document.getElementById('cartBackdrop');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const cartBadge = document.getElementById('cartBadge');
+        const mobileCartBadge = document.getElementById('mobileCartBadge');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutForm = document.getElementById('checkoutForm');
+
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        function parseCSV(text) {
+            const lines = [];
+            let row = [];
+            let inQuotes = false;
+            let currentStr = '';
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') { currentStr += '"'; i++; }
+                    else { inQuotes = !inQuotes; }
+                } else if (char === ',' && !inQuotes) {
+                    row.push(currentStr.trim());
+                    currentStr = '';
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') i++;
+                    row.push(currentStr.trim());
+                    if (row.some(cell => cell.length > 0)) lines.push(row);
+                    row = [];
+                    currentStr = '';
+                } else {
+                    currentStr += char;
+                }
+            }
+            if (currentStr || row.length > 0) {
+                row.push(currentStr.trim());
+                if (row.some(cell => cell.length > 0)) lines.push(row);
+            }
+            return lines;
+        }
+
+        function processCSVData(csvText) {
+            const parsed = parseCSV(csvText);
+            if (parsed.length < 2) return null;
+
+            const headers = parsed[0].map(h => h.toLowerCase());
+            const findIndex = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
+
+            const titleIdx = findIndex(['title', 'name', 'product', 'item', '名称', '商品']);
+            const priceIdx = findIndex(['price', 'cost', 'amount', '价格']);
+            const imageIdx = findIndex(['image', 'img', 'photo', 'picture', 'url', '图片']);
+            const categoryIdx = findIndex(['category', 'cat', 'type', 'collection', '分类']);
+            const descIdx = findIndex(['desc', 'detail', 'info', '描述']);
+            const idIdx = findIndex(['id', 'sku', 'code']);
+
+            const loadedProducts = [];
+
+            for (let i = 1; i < parsed.length; i++) {
+                const row = parsed[i];
+                if (!row || row.length === 0) continue;
+
+                const title = titleIdx !== -1 && row[titleIdx] ? row[titleIdx] : `Headphone ${i}`;
+                const rawPrice = priceIdx !== -1 && row[priceIdx] ? row[priceIdx].replace(/[^0-9.]/g, '') : '49.99';
+                const price = parseFloat(rawPrice) || 49.99;
+                const image = imageIdx !== -1 && row[imageIdx] ? row[imageIdx] : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80';
+                const category = categoryIdx !== -1 && row[categoryIdx] ? row[categoryIdx] : 'General';
+                const description = descIdx !== -1 && row[descIdx] ? row[descIdx] : 'High performance audio headset.';
+                const id = idIdx !== -1 && row[idIdx] ? row[idIdx] : `ITEM-${i}`;
+
+                loadedProducts.push({ id, title, price, image, category, description });
+            }
+
+            return loadedProducts.length > 0 ? loadedProducts : null;
+        }
+
+        async function fetchProducts() {
+            const statusIcon = document.getElementById('sheetStatusIcon');
+            const statusText = document.getElementById('sheetStatusText');
+
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                if (!response.ok) throw new Error('Network error');
+                const csvData = await response.text();
+                const sheetProducts = processCSVData(csvData);
+
+                if (sheetProducts && sheetProducts.length > 0) {
+                    products = sheetProducts;
+                    statusIcon.className = "fa-solid fa-circle-check text-emerald-400";
+                    statusText.textContent = `Live Catalog (${products.length} items from Google Sheet)`;
+                } else {
+                    throw new Error('Empty CSV');
+                }
+            } catch (err) {
+                products = FALLBACK_PRODUCTS;
+                statusIcon.className = "fa-solid fa-circle-info text-amber-400";
+                statusText.textContent = "Catalog Ready (Sample Data)";
+            }
+
+            buildCategoryNavigation();
+            renderProducts();
+        }
+
+        function buildCategoryNavigation() {
+            const categories = [...new Set(products.map(p => p.category))];
+            const dynamicBtns = categoryNav.querySelectorAll('.dynamic-cat');
+            dynamicBtns.forEach(btn => btn.remove());
+            document.getElementById('count-all').textContent = products.length;
+
+            categories.forEach(cat => {
+                const count = products.filter(p => p.category === cat).length;
+                const btn = document.createElement('button');
+                btn.dataset.category = cat;
+                btn.className = 'category-btn dynamic-cat w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors';
+                btn.innerHTML = `
+                    <span class="flex items-center space-x-3">
+                        <i class="fa-solid fa-angle-right text-xs w-5 text-slate-500"></i>
+                        <span class="truncate">${cat}</span>
+                    </span>
+                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">${count}</span>
+                `;
+                categoryNav.appendChild(btn);
+            });
+
+            categoryNav.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryNav.querySelectorAll('.category-btn').forEach(b => {
+                        b.className = 'category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors';
+                    });
+                    btn.className = 'category-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-brand-500/10 text-brand-400 border border-brand-500/20';
+                    activeCategory = btn.dataset.category;
+                    categoryTitle.textContent = activeCategory === 'all' ? 'All Headphones' : activeCategory;
+                    renderProducts();
+                    closeSidebar();
+                });
+            });
+        }
+
+        function renderProducts() {
+            let filtered = products.filter(p => {
+                const matchCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchSearch = p.title.toLowerCase().includes(searchQuery) ||
+                                    p.category.toLowerCase().includes(searchQuery) ||
+                                    p.description.toLowerCase().includes(searchQuery);
+                return matchCategory && matchSearch;
+            });
+
+            const sortVal = sortSelect.value;
+            if (sortVal === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            else if (sortVal === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            else if (sortVal === 'name') filtered.sort((a, b) => a.title.localeCompare(b.title));
+
+            productCountLabel.textContent = `Showing ${filtered.length} item${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                productsGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            productsGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            productsGrid.innerHTML = filtered.map(product => {
+                const cartItem = cart.find(ci => ci.id === product.id);
+                const currentQty = cartItem ? cartItem.quantity : 1;
+
+                return `
+                <div class="group bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-4 flex flex-col transition-all duration-200 hover:shadow-xl hover:shadow-brand-500/5">
+                    <div class="relative w-full h-48 bg-slate-950 rounded-xl overflow-hidden mb-4 flex items-center justify-center">
+                        <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'">
+                        <span class="absolute top-2.5 left-2.5 bg-slate-900/80 backdrop-blur text-slate-300 text-[10px] font-semibold px-2.5 py-1 rounded-md border border-slate-700">${product.category}</span>
+                    </div>
+
+                    <h4 class="font-bold text-slate-100 text-base leading-snug mb-1 line-clamp-1 group-hover:text-brand-400 transition-colors">${product.title}</h4>
+                    <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">${product.description}</p>
+
+                    <div class="mt-auto pt-3 border-t border-slate-800/80 space-y-3">
+                        <div class="flex items-baseline justify-between">
+                            <span class="text-xs text-slate-500">Price</span>
+                            <span class="text-lg font-extrabold text-white">$${product.price.toFixed(2)}</span>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <div class="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 flex-1">
+                                <button onclick="adjustCardQty('${product.id}', -1)" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg"><i class="fa-solid fa-minus text-xs"></i></button>
+                                <input type="number" id="qty-input-${product.id}" value="${currentQty}" min="1" max="99" class="w-full bg-transparent text-center text-xs font-bold text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" onchange="validateInputQty('${product.id}', this.value)">
+                                <button onclick="adjustCardQty('${product.id}', 1)" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg"><i class="fa-solid fa-plus text-xs"></i></button>
+                            </div>
+
+                            <button onclick="addToCartFromCard('${product.id}')" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-semibold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-all shadow-md shadow-brand-600/20">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function adjustCardQty(productId, delta) {
+            const input = document.getElementById(`qty-input-${productId}`);
+            if (!input) return;
+            let val = parseInt(input.value) || 1;
+            input.value = Math.max(1, val + delta);
+        }
+
+        function validateInputQty(productId, value) {
+            const input = document.getElementById(`qty-input-${productId}`);
+            if (!input) return;
+            let val = parseInt(value);
+            input.value = (isNaN(val) || val < 1) ? 1 : val;
+        }
+
+        function addToCartFromCard(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const input = document.getElementById(`qty-input-${productId}`);
+            const qtyToAdd = input ? (parseInt(input.value) || 1) : 1;
+
+            const existingIndex = cart.findIndex(item => item.id === productId);
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += qtyToAdd;
+            } else {
+                cart.push({ ...product, quantity: qtyToAdd });
+            }
+
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateCartItemQty(productId, newQty) {
+            let qty = parseInt(newQty);
+            if (isNaN(qty) || qty < 1) qty = 1;
+            const item = cart.find(ci => ci.id === productId);
+            if (item) {
+                item.quantity = qty;
+                saveCart();
+                updateCartUI();
+            }
+        }
+
+        function removeCartItem(productId) {
+            cart = cart.filter(ci => ci.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            localStorage.setItem('soundpulse_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalCount;
+            mobileCartBadge.textContent = totalCount;
+
+            if (totalCount > 0) mobileCartBadge.classList.replace('hidden', 'flex');
+            else mobileCartBadge.classList.replace('flex', 'hidden');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-500 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-4xl text-slate-700"></i>
+                        <p class="text-sm">Your cart is empty.</p>
+                    </div>`;
+                cartSubtotal.textContent = '$0.00';
+                cartTotal.textContent = '$0.00';
+                return;
+            }
+
+            let subtotal = 0;
+            cartItemsContainer.innerHTML = cart.map(item => {
+                const itemSubtotal = item.price * item.quantity;
+                subtotal += itemSubtotal;
+
+                return `
+                    <div class="flex items-center space-x-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <img src="${item.image}" alt="${item.title}" class="w-14 h-14 object-cover rounded-lg bg-slate-900 border border-slate-800" onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="text-xs font-bold text-slate-200 truncate mb-0.5">${item.title}</h5>
+                            <div class="text-xs text-slate-400 mb-2">$${item.price.toFixed(2)} each</div>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+                                    <button onclick="updateCartItemQty('${item.id}', ${item.quantity - 1})" class="w-5 h-5 flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                    <input type="number" min="1" max="99" value="${item.quantity}" onchange="updateCartItemQty('${item.id}', this.value)" class="w-8 bg-transparent text-center text-xs font-bold text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                    <button onclick="updateCartItemQty('${item.id}', ${item.quantity + 1})" class="w-5 h-5 flex items-center justify-center text-slate-400 hover:text-white"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                </div>
+                                <span class="text-xs font-bold text-slate-300 ml-auto">$${itemSubtotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <button onclick="removeCartItem('${item.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                    </div>`;
+            }).join('');
+
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        function openCart() { cartDrawer.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeCart() { cartDrawer.classList.add('hidden'); document.body.style.overflow = ''; }
+        function openSidebar() { sidebar.classList.remove('-translate-x-full'); sidebarOverlay.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeSidebar() { sidebar.classList.add('-translate-x-full'); sidebarOverlay.classList.add('hidden'); document.body.style.overflow = ''; }
+
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const note = document.getElementById('custNote').value.trim();
+
+            let total = 0;
+            let itemListText = '';
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                itemListText += `${index + 1}. *${item.title}*\n   Qty: ${item.quantity} x $${item.price.toFixed(2)} = $${subtotal.toFixed(2)}\n`;
+            });
+
+            const orderDate = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+            const message = `🎧 *NEW HEADPHONE ORDER - SoundPulse*\n📅 Date: ${orderDate}\n\n👤 *Customer Details:*\n• Name: ${name}\n• Phone: ${phone}\n• Delivery Address: ${address}\n${note ? `• Note: ${note}\n` : ''}\n🛒 *Ordered Items:*\n${itemListText}\n💰 *Total Amount: $${total.toFixed(2)}*\n\nPlease confirm availability and shipping details. Thank you!`;
+
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        });
+
+        cartDrawerBtn.addEventListener('click', openCart);
+        mobileCartBtn.addEventListener('click', openCart);
+        closeCartBtn.addEventListener('click', closeCart);
+        cartBackdrop.addEventListener('click', closeCart);
+        mobileMenuBtn.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            clearSearchBtn.classList.toggle('hidden', !searchQuery);
+            renderProducts();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = ''; searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderProducts();
+        });
+
+        sortSelect.addEventListener('change', renderProducts);
+        document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+            searchQuery = ''; searchInput.value = ''; activeCategory = 'all';
+            clearSearchBtn.classList.add('hidden');
+            renderProducts();
+        });
+
+        fetchProducts();
+        updateCartUI();
+    </script>
+</body>
+</html>
