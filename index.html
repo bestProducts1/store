@@ -39,7 +39,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col md:flex-row pb-16 md:pb-0">
 
     <!-- Mobile Header -->
     <div class="md:hidden sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
@@ -50,10 +50,7 @@
             <i class="fa-solid fa-headphones text-brand-500 text-xl"></i>
             <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">SoundPulse</span>
         </div>
-        <button id="mobileCartBtn" class="p-2 text-slate-300 hover:text-white relative">
-            <i class="fa-solid fa-shopping-bag text-xl"></i>
-            <span id="mobileCartBadge" class="hidden absolute -top-1 -right-1 bg-brand-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-        </button>
+        <div class="w-8"></div> <!-- Spacer for symmetry -->
     </div>
 
     <!-- Mobile Sidebar Overlay -->
@@ -108,15 +105,15 @@
             <div class="border-t border-slate-800/80 pt-4 space-y-3 px-3">
                 <div class="flex items-center space-x-3 text-xs text-slate-400">
                     <i class="fa-solid fa-truck-fast text-brand-500 text-sm w-5"></i>
-                    <span>Fast Express Delivery</span>
+                    <span>US Warehouse</span>
                 </div>
                 <div class="flex items-center space-x-3 text-xs text-slate-400">
                     <i class="fa-solid fa-shield-halved text-brand-500 text-sm w-5"></i>
-                    <span>Official Warranty</span>
+                    <span>Trusted Supplier</span>
                 </div>
                 <div class="flex items-center space-x-3 text-xs text-slate-400">
                     <i class="fa-brands fa-whatsapp text-whatsapp text-sm w-5"></i>
-                    <span>Direct WhatsApp Checkout</span>
+                    <span>Contact Us</span>
                 </div>
             </div>
         </div>
@@ -139,17 +136,11 @@
             </div>
 
             <div class="flex items-center justify-between sm:justify-end space-x-3">
-                <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="hidden lg:inline-flex items-center space-x-2 px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-xs font-medium text-slate-300 hover:text-pink-400 transition-colors">
+                <a href="https://bestproducts1.github.io/perfume-list/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2 px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl text-xs font-medium text-slate-300 hover:text-pink-400 transition-colors">
                     <i class="fa-solid fa-spray-can-sparkles text-pink-400"></i>
                     <span>Perfume Shop</span>
                     <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 </a>
-
-                <button id="cartDrawerBtn" class="flex items-center space-x-2 bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow-lg shadow-brand-600/20 active:scale-95">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Cart</span>
-                    <span id="cartBadge" class="bg-white text-brand-700 text-xs font-bold px-2 py-0.5 rounded-full ml-1">0</span>
-                </button>
             </div>
         </header>
 
@@ -223,6 +214,13 @@
         </footer>
     </main>
 
+    <!-- Floating Cart Button (Fixed at Bottom Right) -->
+    <button id="cartDrawerBtn" class="fixed bottom-6 right-6 z-40 flex items-center space-x-2.5 bg-brand-600 hover:bg-brand-500 text-white px-5 py-3 rounded-full font-bold text-sm transition-all shadow-2xl shadow-brand-600/50 active:scale-95 border border-brand-400/30">
+        <i class="fa-solid fa-cart-shopping text-base"></i>
+        <span>Cart</span>
+        <span id="cartBadge" class="bg-white text-brand-700 text-xs font-bold px-2 py-0.5 rounded-full ml-0.5">0</span>
+    </button>
+
     <!-- Cart Drawer -->
     <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
         <div id="cartBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
@@ -260,7 +258,7 @@
                         </div>
                         <div class="flex justify-between text-slate-400">
                             <span>Shipping</span>
-                            <span class="text-emerald-400 font-medium">Calculated via WhatsApp</span>
+                            <span class="text-emerald-400 font-medium">Free</span>
                         </div>
                         <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-slate-800">
                             <span>Total</span>
@@ -269,12 +267,11 @@
                     </div>
 
                     <form id="checkoutForm" class="pt-2">
-    <button type="submit" id="whatsappCheckoutBtn" class="w-full bg-whatsapp hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition-all active:scale-95">
-        <i class="fa-brands fa-whatsapp text-lg"></i>
-        <span>Check Out</span>
-    </button>
-</form>
-                    
+                        <button type="submit" id="whatsappCheckoutBtn" class="w-full bg-whatsapp hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition-all active:scale-95">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Check Out</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -308,12 +305,10 @@
         
         const cartDrawer = document.getElementById('cartDrawer');
         const cartDrawerBtn = document.getElementById('cartDrawerBtn');
-        const mobileCartBtn = document.getElementById('mobileCartBtn');
         const closeCartBtn = document.getElementById('closeCartBtn');
         const cartBackdrop = document.getElementById('cartBackdrop');
         const cartItemsContainer = document.getElementById('cartItemsContainer');
         const cartBadge = document.getElementById('cartBadge');
-        const mobileCartBadge = document.getElementById('mobileCartBadge');
         const cartSubtotal = document.getElementById('cartSubtotal');
         const cartTotal = document.getElementById('cartTotal');
         const checkoutForm = document.getElementById('checkoutForm');
@@ -363,7 +358,7 @@
             const headers = parsed[0].map(h => h.toLowerCase());
             const findIndex = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
 
-            const titleIdx = findIndex(['title', 'name', 'product', 'item', '名称', '商品']);
+            const titleIdx = findIndex(['title', 'name', 'caption', 'product', 'item', '名称', '商品']);
             const priceIdx = findIndex(['price', 'cost', 'amount', '价格']);
             const imageIdx = findIndex(['image', 'img', 'photo', 'picture', 'url', '图片']);
             const categoryIdx = findIndex(['category', 'cat', 'type', 'collection', '分类']);
@@ -569,11 +564,7 @@
 
         function updateCartUI() {
             const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartBadge.textContent = totalCount;
-            mobileCartBadge.textContent = totalCount;
-
-            if (totalCount > 0) mobileCartBadge.classList.replace('hidden', 'flex');
-            else mobileCartBadge.classList.replace('flex', 'hidden');
+            if (cartBadge) cartBadge.textContent = totalCount;
 
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = `
@@ -623,10 +614,11 @@
             e.preventDefault();
             if (cart.length === 0) { alert('Your cart is empty!'); return; }
 
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const address = document.getElementById('custAddress').value.trim();
-            const note = document.getElementById('custNote').value.trim();
+            const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+            const name = getVal('custName');
+            const phone = getVal('custPhone');
+            const address = getVal('custAddress');
+            const note = getVal('custNote');
 
             let total = 0;
             let itemListText = '';
@@ -637,13 +629,16 @@
             });
 
             const orderDate = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
-            const message = `🎧 *NEW HEADPHONE ORDER - SoundPulse*\n📅 Date: ${orderDate}\n\n👤 *Customer Details:*\n• Name: ${name}\n• Phone: ${phone}\n• Delivery Address: ${address}\n${note ? `• Note: ${note}\n` : ''}\n🛒 *Ordered Items:*\n${itemListText}\n💰 *Total Amount: $${total.toFixed(2)}*\n\nPlease confirm availability and shipping details. Thank you!`;
+            let message = `🎧 *NEW HEADPHONE ORDER - SoundPulse*\n📅 Date: ${orderDate}\n\n`;
+            if (name || phone || address) {
+                message += `👤 *Customer Details:*\n${name ? `• Name: ${name}\n` : ''}${phone ? `• Phone: ${phone}\n` : ''}${address ? `• Address: ${address}\n` : ''}${note ? `• Note: ${note}\n` : ''}\n`;
+            }
+            message += `🛒 *Ordered Items:*\n${itemListText}\n💰 *Total Amount: $${total.toFixed(2)}*\n\nPlease confirm availability and shipping details. Thank you!`;
 
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
         });
 
-        cartDrawerBtn.addEventListener('click', openCart);
-        mobileCartBtn.addEventListener('click', openCart);
+        if (cartDrawerBtn) cartDrawerBtn.addEventListener('click', openCart);
         closeCartBtn.addEventListener('click', closeCart);
         cartBackdrop.addEventListener('click', closeCart);
         mobileMenuBtn.addEventListener('click', openSidebar);
